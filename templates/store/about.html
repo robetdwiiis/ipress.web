@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Tentang Kami - iPremium Store{% endblock %}
 
 {% block content %}
@@ -19,7 +20,7 @@
             <p class="text-blue-100 leading-relaxed text-sm md:text-base">iPremium Store hadir sebagai solusi belanja iPhone yang aman, transparan, dan terjangkau. Kami menghubungkan pembeli dengan jaringan reseller terverifikasi di seluruh Indonesia.</p>
         </div>
         <div class="relative min-h-[300px] md:min-h-full overflow-hidden group flex items-end justify-center pt-10 px-8 border-l border-white/5">
-            <img src="/media/hero_banner.png?v=2" alt="iPremium Store" class="relative z-10 w-full max-h-[400px] object-contain object-bottom origin-bottom group-hover:scale-105 transition-transform duration-700 drop-shadow-2xl">
+            <img src="{% static 'images/hero_banner.png' %}" alt="iPremium Store" class="relative z-10 w-full max-h-[400px] object-contain object-bottom origin-bottom group-hover:scale-105 transition-transform duration-700 drop-shadow-2xl">
         </div>
     </div>
 </div>
