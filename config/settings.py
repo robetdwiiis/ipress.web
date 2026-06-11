@@ -39,10 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'cloudinary_storage',           
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    'cloudinary',                   
     
     # Custom apps
     'accounts',
@@ -151,19 +149,19 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Cloudinary (Media Storage)
 import cloudinary
+import os
 
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME', ''),
-    'API_KEY': os.environ.get('CLOUDINARY_API_KEY', ''),
-    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET', ''),
+    'CLOUD_NAME': 'dzln7tsxw',
+    'API_KEY': config('CLOUDINARY_API_KEY', default=''),
+    'API_SECRET': config('CLOUDINARY_API_SECRET', default=''),
 }
 
 cloudinary.config(
-    cloud_name=os.environ.get('dzln7tsxw', ''),
-    api_key=os.environ.get('923991867693638', ''),
-    api_secret=os.environ.get('6Ct1AsXwidcY3fwkkxVuKJVlAlE', ''),
+    cloud_name='dzln7tsxw',
+    api_key=config('CLOUDINARY_API_KEY', default=''),
+    api_secret=config('CLOUDINARY_API_SECRET', default=''),
 )
 
 STORAGES = {
