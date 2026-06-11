@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block title %}Profil Saya - iPremium Store{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto py-10 px-4">
+    <div class="flex flex-col lg:flex-row gap-8">
+        <!-- Sidebar Profile -->
+        <div class="lg:w-1/4">
+            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 sticky top-24">
+                <div class="flex items-center space-x-4 mb-8 pb-6 border-b border-gray-50">
+                    <div class="relative group">
+                        {% if user.profile_picture %}
+                            <img src="{{ user.profile_picture.url }}" alt="Avatar" class="w-16 h-16 rounded-full object-cover border-2 border-blue-500 p-0.5">
+                        {% else %}
+                            <div class="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center text-slate-900 font-bold text-2xl shadow-sm border border-blue-200">
+                                {{ user.get_display_name.0|upper }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <h2 class="font-bold text-gray-900 leading-tight">{{ user.get_display_name }}</h2>
+                        <p class="text-sm text-gray-500 flex items-center mt-1">
+                            <i class="fas fa-user-edit mr-2 text-xs"></i> Ubah Profil
+                        </p>
+                    </div>
+                </div>
+
+                <nav class="space-y-1">
+                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-xl bg-blue-50 text-slate-900 font-bold">
+                        <i class="far fa-user w-5 text-center"></i>
+                        <span>Akun Saya</span>
+                    </a>
+
+                </nav>
+
+                {% if user.role == 'BUYER' %}
+                <div class="mt-8 pt-6 border-t border-gray-100">
+                    <h3 class="font-bold text-gray-900 mb-2">Program Reseller</h3>
+                    {% if user.reseller_status == 'NONE' or user.reseller_status == 'REJECTED' %}
+                        <p class="text-sm text-gray-500 mb-4">Bergabunglah menjadi reseller untuk mendapatkan komisi.</p>
+                        <a href="{% url 'store:apply_reseller' %}" class="w-full bg-blue-900 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded-lg shadow-sm transition text-sm flex justify-center items-center">
+                            <i class="fas fa-handshake mr-2"></i> Daftar Reseller
+                        </a>
+                        {% if user.reseller_status == 'REJECTED' %}
+                        <p class="text-xs text-red-500 mt-2">Pengajuan sebelumnya ditolak. Anda dapat mencoba lagi.</p>
+                        {% endif %}
+                    {% elif user.reseller_status == 'PENDING' %}
+                        <div class="bg-yellow-50 text-yellow-800 p-3 rounded-lg border border-yellow-200 text-sm flex items-start">
+                            <i class="fas fa-clock mt-0.5 mr-2 text-yellow-600"></i>
+                            <span>Pengajuan reseller sedang diproses admin.</span>
+                        </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="lg:w-3/4 space-y-8">
+            <!-- Profile Form -->
+            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 sm:p-10">
+                <div class="mb-8 border-b border-gray-50 pb-6">
+                    <h2 class="text-2xl font-bold text-gray-900">Profil Saya</h2>
+                    <p class="text-gray-500 mt-1">Kelola informasi profil Anda untuk keamanan akun.</p>
+                </div>
+
+                <form method="post" enctype="multipart/form-data" class="space-y-6">
+                    {% csrf_token %}
+                    
+                    {% if form.errors %}
+                    <div class="p-4 bg-red-50 border border-red-100 rounded-2xl text-red-700 text-sm">
+                        <p class="font-bold mb-1">Terjadi kesalahan:</p>
+                        <ul class="list-disc list-inside">
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <li>{{ field.label }}: {{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Username (ID Akun)</label>
+                        {{ form.username }}
+                        <div class="flex justify-between items-center mt-1">
+                            <p class="text-xs text-gray-400">Username digunakan untuk login dan identifikasi akun.</p>
+                            <a href="{% url 'accounts:password_change' %}" class="text-xs font-bold text-blue-900 hover:text-slate-800 transition flex items-center">
+                                <i class="fas fa-key mr-1"></i> Ganti Password
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Depan</label>
+                            {{ form.first_name }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Belakang</label>
+                            {{ form.last_name }}
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+                        {{ form.email }}
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Nomor Telepon</label>
+                            {{ form.phone_number }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Foto Profil</label>
+                            {{ form.profile_picture }}
+                        </div>
+                    </div>
+
+                    <div class="pt-6 border-t border-gray-50 mt-8">
+                        <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
+                            <i class="fas fa-map-marker-alt mr-2 text-red-500"></i>
+                            Alamat Pengiriman & Pembayaran
+                        </h3>
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Alamat Lengkap</label>
+                                {{ form.address }}
+                            </div>
+                            <div class="grid grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Kota</label>
+                                    {{ form.city }}
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Kode Pos</label>
+                                    {{ form.postal_code }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-6 border-t border-gray-50 mt-8">
+                        <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
+                            <i class="fas fa-university mr-2 text-blue-500"></i>
+                            Informasi Pembayaran (Bank)
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Bank</label>
+                                {{ form.bank_name }}
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Nomor Rekening</label>
+                                {{ form.account_number }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-8">
+                        <button type="submit" class="bg-blue-900 hover:bg-slate-900 text-white font-bold py-4 px-10 rounded-2xl shadow-xl shadow-blue-200 transition duration-300 transform hover:-translate-y-1">
+                            Simpan Perubahan
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+{% endblock %}

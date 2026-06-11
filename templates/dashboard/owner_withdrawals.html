@@ -1,0 +1,81 @@
+{% extends 'base_dashboard.html' %}
+{% load humanize %}
+{% block title %}Kelola Penarikan Komisi{% endblock %}
+{% block header_title %}Penarikan Komisi (Reseller){% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+        <div>
+            <h2 class="text-xl font-bold text-gray-800">Daftar Pengajuan</h2>
+            <p class="text-sm text-gray-500">Konfirmasi pengajuan pencairan saldo dari reseller.</p>
+        </div>
+    </div>
+    
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm text-left text-gray-500">
+            <thead class="text-xs text-gray-400 uppercase bg-gray-50">
+                <tr>
+                    <th class="px-6 py-4">ID</th>
+                    <th class="px-6 py-4">Reseller</th>
+                    <th class="px-6 py-4">Nominal</th>
+                    <th class="px-6 py-4">Tujuan Transfer</th>
+                    <th class="px-6 py-4">Waktu</th>
+                    <th class="px-6 py-4">Status / Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for w in withdrawals %}
+                <tr class="bg-white border-b hover:bg-gray-50">
+                    <td class="px-6 py-4 font-semibold text-gray-900">#{{ w.id }}</td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-900 flex items-center justify-center font-bold">
+                                {{ w.user.username.0|upper }}
+                            </div>
+                            <span class="font-bold text-gray-800">{{ w.user.username }}</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 font-bold text-gray-900">Rp {{ w.amount|intcomma }}</td>
+                    <td class="px-6 py-4">
+                        <span class="block text-gray-800 font-semibold">{{ w.get_bank_name_display|default:w.bank_name }}</span>
+                        <span class="text-xs text-gray-500">{{ w.account_number }}</span>
+                        <span class="block text-xs font-semibold text-gray-700">a/n {{ w.account_name }}</span>
+                    </td>
+                    <td class="px-6 py-4">{{ w.created_at|date:"d/m/Y H:i" }}</td>
+                    <td class="px-6 py-4">
+                        {% if w.status == 'PENDING' %}
+                            <div class="flex space-x-2">
+                                <form method="POST" action="{% url 'dashboard:owner_withdrawal_approve' w.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" onclick="return confirm('Apakah Anda sudah mentransfer uangnya ke rekening tersebut?')" class="bg-green-100 text-green-700 hover:bg-green-200 px-3 py-1.5 rounded-lg font-semibold text-xs transition">
+                                        <i class="fas fa-check mr-1"></i> Approve
+                                    </button>
+                                </form>
+                                <form method="POST" action="{% url 'dashboard:owner_withdrawal_reject' w.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" onclick="return confirm('Tolak penarikan ini? Saldo akan dikembalikan ke dompet reseller.')" class="bg-red-100 text-red-700 hover:bg-red-200 px-3 py-1.5 rounded-lg font-semibold text-xs transition">
+                                        <i class="fas fa-times mr-1"></i> Reject
+                                    </button>
+                                </form>
+                            </div>
+                        {% elif w.status == 'APPROVED' %}
+                            <span class="bg-green-100 text-green-800 text-xs font-semibold px-3 py-1 rounded-full"><i class="fas fa-check mr-1"></i> Selesai ({{ w.updated_at|date:"d/m H:i" }})</span>
+                        {% else %}
+                            <span class="bg-red-100 text-red-800 text-xs font-semibold px-3 py-1 rounded-full"><i class="fas fa-times mr-1"></i> Ditolak</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="px-6 py-10 text-center text-gray-500">
+                        <i class="fas fa-inbox text-4xl text-gray-300 mb-3"></i>
+                        <p>Belum ada pengajuan penarikan dana.</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block title %}iPremium Store - The Best iPhone Deals{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="bg-gradient-to-br from-blue-900 to-slate-900 rounded-2xl overflow-hidden mb-12 text-white shadow-2xl">
+    <div class="grid grid-cols-1 md:grid-cols-2">
+        <div class="px-10 py-14 flex flex-col justify-center relative z-10">
+            <p class="text-blue-200 text-sm font-semibold uppercase tracking-widest mb-3">✦ Original &amp; Bergaransi Resmi</p>
+            <h1 class="text-4xl lg:text-5xl font-bold leading-tight mb-4 drop-shadow-sm text-white">
+                iPhone Terbaik,<br>Harga Terbaik
+            </h1>
+            <p class="text-blue-100 text-sm md:text-base leading-relaxed mb-7 max-w-sm">
+                Dapatkan iPhone idamanmu dengan garansi resmi Apple, pengiriman gratis ke seluruh Indonesia, dan transaksi 100% aman.
+            </p>
+            <div class="flex flex-wrap gap-3">
+                <a href="#products" class="bg-white text-blue-900 hover:bg-gray-100 font-bold px-6 py-3 rounded-xl text-sm transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                    <i class="fas fa-th-large mr-1.5"></i> Lihat Koleksi
+                </a>
+                <a href="{% url 'store:reseller_program' %}" class="border border-blue-400/30 hover:border-blue-400 hover:bg-slate-800/50 backdrop-blur-sm text-white font-semibold px-6 py-3 rounded-xl text-sm transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                    <i class="fas fa-handshake mr-1.5"></i> Program Reseller
+                </a>
+            </div>
+        </div>
+        <div class="flex relative items-end justify-center pt-4 md:pt-10 px-8 group overflow-hidden">
+            <!-- Decorative glow behind phones -->
+            <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3/4 h-1/2 bg-blue-400 rounded-full mix-blend-overlay filter blur-3xl opacity-20"></div>
+            
+            <img src="/media/hero_banner.png?v=2" alt="iPhone Collection" class="relative z-10 w-full max-h-[250px] md:max-h-[450px] object-contain object-bottom origin-bottom group-hover:scale-105 transition-transform duration-700">
+        </div>
+    </div>
+</div>
+
+<!-- Trust Bar -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+    <div class="bg-white border border-gray-200 rounded-xl px-5 py-4 flex items-center space-x-3">
+        <i class="fas fa-shield-alt text-blue-900 text-xl"></i>
+        <p class="text-sm font-medium text-gray-700">Garansi Resmi<br><span class="text-xs text-gray-400">Apple 1 Tahun</span></p>
+    </div>
+    <div class="bg-white border border-gray-200 rounded-xl px-5 py-4 flex items-center space-x-3">
+        <i class="fas fa-shipping-fast text-green-600 text-xl"></i>
+        <p class="text-sm font-medium text-gray-700">Gratis Ongkir<br><span class="text-xs text-gray-400">Seluruh Indonesia</span></p>
+    </div>
+    <div class="bg-white border border-gray-200 rounded-xl px-5 py-4 flex items-center space-x-3">
+        <i class="fas fa-lock text-yellow-600 text-xl"></i>
+        <p class="text-sm font-medium text-gray-700">Bayar Aman<br><span class="text-xs text-gray-400">Bank & QRIS</span></p>
+    </div>
+    <div class="bg-white border border-gray-200 rounded-xl px-5 py-4 flex items-center space-x-3">
+        <i class="fas fa-headset text-purple-600 text-xl"></i>
+        <p class="text-sm font-medium text-gray-700">CS Responsif<br><span class="text-xs text-gray-400">7 Hari Seminggu</span></p>
+    </div>
+</div>
+
+<!-- Products Section -->
+<div id="products" class="mb-4 flex items-end justify-between">
+    <div>
+        <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Koleksi iPhone</h2>
+        <p class="text-gray-500 mt-1 text-sm">Pilih varian terbaik yang sesuai dengan kebutuhan Anda.</p>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-8">
+    {% for product in products %}
+    <div class="bg-white rounded-xl shadow-sm hover:shadow-md border border-gray-200 overflow-hidden flex flex-col transition group">
+        <!-- Image -->
+        <div class="h-56 bg-gray-50 flex items-center justify-center p-6 relative">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="max-h-full object-contain group-hover:scale-105 transition-transform duration-300">
+            {% else %}
+                <i class="fas fa-mobile-alt text-5xl text-gray-200"></i>
+            {% endif %}
+            <div class="absolute top-4 right-4">
+                {% if product.stock > 0 %}
+                    <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-1 rounded-full">Stok: {{ product.stock }}</span>
+                {% else %}
+                    <span class="bg-red-100 text-red-700 text-xs font-semibold px-2.5 py-1 rounded-full">Habis</span>
+                {% endif %}
+            </div>
+        </div>
+        <!-- Info -->
+        <div class="p-5 flex flex-col flex-grow">
+            <h3 class="font-bold text-gray-900 text-base mb-1 group-hover:text-blue-900 transition">{{ product.name }}</h3>
+            <p class="text-gray-400 text-xs mb-4 line-clamp-2 flex-grow">{{ product.description }}</p>
+            <div class="flex items-center justify-between mt-auto">
+                <span class="text-xl font-bold text-gray-900">Rp {{ product.price|intcomma }}</span>
+            </div>
+            <a href="{% url 'store:product_detail' product.id %}"
+                class="mt-4 block w-full text-center font-bold py-2.5 px-4 rounded-lg transition text-sm bg-blue-900 text-white hover:bg-slate-900">
+                Beli Sekarang
+            </a>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-span-full text-center py-20 bg-white border border-dashed border-gray-300 rounded-xl">
+        <i class="fas fa-box-open text-5xl text-gray-200 mb-4"></i>
+        <p class="text-gray-400 font-medium">Belum ada produk tersedia.</p>
+    </div>
+    {% endfor %}
+</div>
+
+{% if user.is_authenticated and user.role == 'BUYER' and user.reseller_status == 'NONE' %}
+<!-- Reseller Banner -->
+<div class="bg-blue-50 border border-blue-200 rounded-2xl p-8 flex flex-col md:flex-row items-center justify-between gap-5 mb-2">
+    <div class="flex items-center space-x-4">
+        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+            <i class="fas fa-handshake text-blue-900 text-xl"></i>
+        </div>
+        <div>
+            <h3 class="font-bold text-gray-900">Ingin penghasilan tambahan?</h3>
+            <p class="text-sm text-gray-500">Bergabunglah sebagai reseller dan dapatkan komisi hingga 5% setiap penjualan.</p>
+        </div>
+    </div>
+    <a href="{% url 'store:reseller_program' %}" class="flex-shrink-0 bg-blue-900 hover:bg-slate-900 text-white font-bold px-6 py-2.5 rounded-xl text-sm transition">
+        Pelajari Lebih Lanjut
+    </a>
+</div>
+{% endif %}
+{% endblock %}

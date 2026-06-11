@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block title %}{{ product.name }} - iPremium Store{% endblock %}
+
+{% block content %}
+<div class="mb-6">
+    <a href="{% url 'store:home' %}" class="inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">
+        <i class="fas fa-arrow-left mr-2"></i> Kembali ke Toko
+    </a>
+</div>
+
+<div class="bg-white rounded-[2.5rem] shadow-2xl border border-gray-100 overflow-hidden mb-20">
+    <div class="lg:flex">
+        <!-- Product Image Section -->
+        <div class="lg:w-1/2 p-12 bg-gradient-to-br from-gray-50 to-gray-100 flex justify-center items-center relative overflow-hidden">
+            <!-- Decorative circle -->
+            <div class="absolute w-96 h-96 bg-white rounded-full opacity-60 filter blur-3xl mix-blend-multiply"></div>
+            
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="max-w-full h-auto object-contain relative z-10 transform hover:scale-105 transition-transform duration-700 drop-shadow-2xl">
+            {% else %}
+                <div class="w-64 h-64 bg-white/50 backdrop-blur flex items-center justify-center rounded-3xl text-gray-400 font-medium relative z-10 border border-gray-200">No Image</div>
+            {% endif %}
+        </div>
+        
+        <!-- Product Info Section -->
+        <div class="lg:w-1/2 p-12 lg:p-16 flex flex-col justify-center">
+            <div class="mb-4 flex items-center space-x-3">
+                <span class="px-3 py-1 bg-gray-900 text-white text-xs font-bold uppercase tracking-widest rounded-full">Apple</span>
+                {% if product.stock > 0 %}
+                    <span class="px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold uppercase tracking-widest rounded-full flex items-center">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 mr-2 animate-pulse"></span>
+                        Tersedia ({{ product.stock }})
+                    </span>
+                {% else %}
+                    <span class="px-3 py-1 bg-red-100 text-red-800 text-xs font-bold uppercase tracking-widest rounded-full">Habis</span>
+                {% endif %}
+            </div>
+            
+            <h1 class="text-4xl lg:text-5xl font-extrabold text-gray-900 mb-6 tracking-tight">{{ product.name }}</h1>
+            
+            <div class="mb-8 pb-8 border-b border-gray-100">
+                <p class="text-sm text-gray-400 font-medium uppercase tracking-wider mb-2">Harga Resmi</p>
+                <p class="text-4xl text-blue-900 font-extrabold tracking-tight">Rp {{ product.price|intcomma }}</p>
+            </div>
+            
+            <div class="prose prose-lg text-gray-500 mb-10 leading-relaxed">
+                <p>{{ product.description }}</p>
+            </div>
+            
+            <!-- Features List -->
+            <ul class="space-y-4 mb-10">
+                <li class="flex items-center text-gray-700 font-medium">
+                    <i class="fas fa-shield-alt text-emerald-500 text-xl w-8"></i>
+                    Garansi Resmi Apple 1 Tahun
+                </li>
+                <li class="flex items-center text-gray-700 font-medium">
+                    <i class="fas fa-truck text-blue-500 text-xl w-8"></i>
+                    Pengiriman Aman Berasuransi
+                </li>
+                <li class="flex items-center text-gray-700 font-medium">
+                    <i class="fas fa-undo text-purple-500 text-xl w-8"></i>
+                    Jaminan 100% Original
+                </li>
+            </ul>
+            
+            <div class="mt-auto pt-4">
+                {% if product.stock > 0 %}
+                    <a href="{% url 'store:checkout' product.id %}" class="flex items-center justify-center w-full bg-gray-900 hover:bg-black text-white font-bold py-5 px-8 rounded-2xl shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl text-lg group">
+                        Lanjut ke Pembayaran
+                        <i class="fas fa-arrow-right ml-3 group-hover:translate-x-2 transition-transform"></i>
+                    </a>
+                {% else %}
+                    <button disabled class="w-full bg-gray-100 text-gray-400 font-bold py-5 px-8 rounded-2xl cursor-not-allowed border border-gray-200 flex items-center justify-center text-lg">
+                        <i class="fas fa-times-circle mr-3"></i> Stok Sedang Kosong
+                    </button>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
