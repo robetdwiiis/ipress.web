@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load humanize %}
+{% load static %}
 {% block title %}iPremium Store - The Best iPhone Deals{% endblock %}
 
 {% block content %}
@@ -27,7 +28,7 @@
             <!-- Decorative glow behind phones -->
             <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3/4 h-1/2 bg-blue-400 rounded-full mix-blend-overlay filter blur-3xl opacity-20"></div>
             
-            <img src="/media/hero_banner.png?v=2" alt="iPhone Collection" class="relative z-10 w-full max-h-[250px] md:max-h-[450px] object-contain object-bottom origin-bottom group-hover:scale-105 transition-transform duration-700">
+            <img src="{% static 'images/hero_banner.png' %}" alt="iPhone Collection" class="relative z-10 w-full max-h-[250px] md:max-h-[450px] object-contain object-bottom origin-bottom group-hover:scale-105 transition-transform duration-700">
         </div>
     </div>
 </div>
