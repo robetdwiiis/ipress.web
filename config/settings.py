@@ -140,6 +140,9 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
 
+# Biarkan WhiteNoise melacak file langsung dari folder 'static' tanpa perlu collectstatic
+WHITENOISE_USE_FINDERS = True
+
 # Media files (Images uploaded by users/admin)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
