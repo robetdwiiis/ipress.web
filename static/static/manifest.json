@@ -1,0 +1,17 @@
+{
+    "name": "Admin iPremium Store",
+    "short_name": "iPremium",
+    "description": "Dashboard Admin iPremium Store",
+    "start_url": "/dashboard/",
+    "display": "standalone",
+    "background_color": "#f8fafc",
+    "theme_color": "#1e3a8a",
+    "icons": [
+        {
+            "src": "/static/icons/icon.svg",
+            "sizes": "192x192 512x512",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        }
+    ]
+}
