@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% block title %}Program Reseller - iPremium Store{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<div class="bg-slate-900 rounded-2xl px-8 py-14 text-white text-center mb-12">
+    <p class="text-blue-200 font-medium text-sm uppercase tracking-widest mb-3">Program Afiliasi</p>
+    <h1 class="text-4xl font-bold mb-4">Bergabung Menjadi Reseller</h1>
+    <p class="text-blue-100 max-w-xl mx-auto text-base leading-relaxed">Dapatkan komisi hingga <strong class="text-white">5%</strong> setiap kali ada pembeli yang membeli melalui link Anda. Daftar gratis, tanpa modal awal.</p>
+</div>
+
+<!-- Benefits -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-14">
+    <div class="bg-white border border-gray-200 rounded-xl p-6 text-center">
+        <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-percentage text-blue-900 text-2xl"></i>
+        </div>
+        <h3 class="font-bold text-gray-900 text-lg mb-2">Komisi 5%</h3>
+        <p class="text-gray-500 text-sm">Dapatkan komisi 5% dari setiap penjualan langsung melalui link referral Anda.</p>
+    </div>
+    <div class="bg-white border border-gray-200 rounded-xl p-6 text-center">
+        <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-layer-group text-green-600 text-2xl"></i>
+        </div>
+        <h3 class="font-bold text-gray-900 text-lg mb-2">Komisi Upline 2%</h3>
+        <p class="text-gray-500 text-sm">Rekrut reseller baru dan dapatkan komisi tambahan 2% dari penjualan mereka.</p>
+    </div>
+    <div class="bg-white border border-gray-200 rounded-xl p-6 text-center">
+        <div class="w-14 h-14 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-wallet text-purple-600 text-2xl"></i>
+        </div>
+        <h3 class="font-bold text-gray-900 text-lg mb-2">Penarikan Mudah</h3>
+        <p class="text-gray-500 text-sm">Saldo komisi dapat ditarik kapan saja ke rekening bank atau e-wallet Anda.</p>
+    </div>
+</div>
+
+<!-- How It Works -->
+<div class="mb-14">
+    <h2 class="text-2xl font-bold text-gray-900 text-center mb-8">Cara Kerja</h2>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        {% for step in "1234" %}
+        <div class="flex flex-col items-center text-center">
+            <div class="w-12 h-12 rounded-full bg-blue-900 text-white font-bold text-lg flex items-center justify-center mb-4">{{ step }}</div>
+            {% if step == '1' %}
+                <h4 class="font-semibold text-gray-800 mb-1">Daftar Akun</h4>
+                <p class="text-sm text-gray-500">Buat akun gratis di iPremium Store</p>
+            {% elif step == '2' %}
+                <h4 class="font-semibold text-gray-800 mb-1">Ajukan Reseller</h4>
+                <p class="text-sm text-gray-500">Klik "Daftar Reseller" dan tunggu persetujuan admin</p>
+            {% elif step == '3' %}
+                <h4 class="font-semibold text-gray-800 mb-1">Bagikan Link</h4>
+                <p class="text-sm text-gray-500">Bagikan link unik produk ke calon pembeli</p>
+            {% elif step == '4' %}
+                <h4 class="font-semibold text-gray-800 mb-1">Terima Komisi</h4>
+                <p class="text-sm text-gray-500">Komisi otomatis masuk ke saldo Anda setiap ada penjualan</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- CTA -->
+<div class="bg-gray-50 border border-gray-200 rounded-2xl p-10 text-center">
+    {% if user.is_authenticated %}
+        {% if user.role == 'RESELLER' %}
+            <i class="fas fa-check-circle text-green-500 text-4xl mb-4"></i>
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">Anda Sudah Menjadi Reseller!</h2>
+            <p class="text-gray-500 mb-6">Buka dashboard untuk melihat link referral dan statistik penjualan Anda.</p>
+            <a href="{% url 'dashboard:home' %}" class="bg-blue-900 hover:bg-slate-900 text-white font-bold px-8 py-3 rounded-xl transition">
+                Buka Dashboard Reseller
+            </a>
+        {% elif user.reseller_status == 'PENDING' %}
+            <i class="fas fa-clock text-yellow-500 text-4xl mb-4"></i>
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">Pengajuan Sedang Diproses</h2>
+            <p class="text-gray-500">Admin sedang meninjau pengajuan Anda. Biasanya selesai dalam 1×24 jam.</p>
+        {% elif user.reseller_status == 'REJECTED' %}
+            <i class="fas fa-times-circle text-red-500 text-4xl mb-4"></i>
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">Pengajuan Ditolak</h2>
+            <p class="text-gray-500 mb-6">Pengajuan sebelumnya ditolak. Anda dapat mengajukan kembali dengan melengkapi formulir.</p>
+            <a href="{% url 'store:apply_reseller' %}" class="bg-blue-900 hover:bg-slate-900 text-white font-bold px-8 py-3 rounded-xl transition inline-block">
+                <i class="fas fa-redo mr-2"></i> Ajukan Ulang
+            </a>
+        {% else %}
+            <i class="fas fa-handshake text-blue-500 text-4xl mb-4"></i>
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">Siap Memulai?</h2>
+            <p class="text-gray-500 mb-6">Isi formulir pengajuan reseller. Admin akan meninjau dan menghubungi Anda dalam 1×24 jam.</p>
+            <a href="{% url 'store:apply_reseller' %}" class="bg-blue-900 hover:bg-slate-900 text-white font-bold px-8 py-3 rounded-xl transition inline-block">
+                <i class="fas fa-handshake mr-2"></i> Daftar Jadi Reseller
+            </a>
+        {% endif %}
+    {% else %}
+        <i class="fas fa-handshake text-blue-500 text-4xl mb-4"></i>
+        <h2 class="text-2xl font-bold text-gray-900 mb-2">Mulai Hasilkan Komisi Hari Ini</h2>
+        <p class="text-gray-500 mb-6">Buat akun gratis terlebih dahulu, lalu ajukan status reseller Anda.</p>
+        <a href="{% url 'accounts:register' %}" class="bg-blue-900 hover:bg-slate-900 text-white font-bold px-8 py-3 rounded-xl transition">
+            Buat Akun Gratis
+        </a>
+    {% endif %}
+</div>
+{% endblock %}

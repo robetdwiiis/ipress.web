@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Tentang Kami - iPremium Store{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<div class="bg-gradient-to-br from-blue-900 to-slate-900 rounded-2xl overflow-hidden mb-12 text-white shadow-2xl">
+    <div class="grid grid-cols-1 md:grid-cols-2">
+        <div class="p-10 lg:p-14 flex flex-col justify-center relative z-10">
+            <div class="flex items-center space-x-2 mb-4">
+                <div class="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/20 shadow-inner">
+                    <i class="fas fa-mobile-alt text-white text-lg"></i>
+                </div>
+                <p class="text-blue-100 font-bold tracking-widest text-sm uppercase ml-2">iPremium Store</p>
+                <span class="text-blue-300 text-sm mx-1">&bull;</span>
+                <p class="text-blue-200 font-medium text-sm">Since 2014</p>
+            </div>
+            
+            <h1 class="text-3xl lg:text-4xl font-bold text-white mb-5 leading-snug drop-shadow-sm">Platform Reseller iPhone<br>Terpercaya di Indonesia</h1>
+            <p class="text-blue-100 leading-relaxed text-sm md:text-base">iPremium Store hadir sebagai solusi belanja iPhone yang aman, transparan, dan terjangkau. Kami menghubungkan pembeli dengan jaringan reseller terverifikasi di seluruh Indonesia.</p>
+        </div>
+        <div class="relative min-h-[300px] md:min-h-full overflow-hidden group flex items-end justify-center pt-10 px-8 border-l border-white/5">
+            <img src="{% static 'images/hero_banner.png' %}" alt="iPremium Store" class="relative z-10 w-full max-h-[400px] object-contain object-bottom origin-bottom group-hover:scale-105 transition-transform duration-700 drop-shadow-2xl">
+        </div>
+    </div>
+</div>
+
+<!-- Stats -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+    <div class="bg-white border border-gray-200 rounded-xl p-6 text-center">
+        <p class="text-3xl font-bold text-slate-900">500+</p>
+        <p class="text-sm text-gray-500 mt-1">Pelanggan Puas</p>
+    </div>
+    <div class="bg-white border border-gray-200 rounded-xl p-6 text-center">
+        <p class="text-3xl font-bold text-slate-900">50+</p>
+        <p class="text-sm text-gray-500 mt-1">Reseller Aktif</p>
+    </div>
+    <div class="bg-white border border-gray-200 rounded-xl p-6 text-center">
+        <p class="text-3xl font-bold text-slate-900">100%</p>
+        <p class="text-sm text-gray-500 mt-1">Produk Original</p>
+    </div>
+    <div class="bg-white border border-gray-200 rounded-xl p-6 text-center">
+        <p class="text-3xl font-bold text-slate-900">2 Th</p>
+        <p class="text-sm text-gray-500 mt-1">Pengalaman</p>
+    </div>
+</div>
+
+<!-- Why Us -->
+<div class="mb-12">
+    <h2 class="text-2xl font-bold text-gray-900 mb-2">Kenapa Pilih Kami?</h2>
+    <p class="text-gray-500 text-sm mb-7">Kami berkomitmen memberikan pengalaman belanja terbaik.</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="bg-white border border-gray-200 rounded-xl p-6 flex items-start space-x-4">
+            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-shield-alt text-blue-900 text-xl"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-gray-900 mb-1">Produk 100% Original</h4>
+                <p class="text-sm text-gray-500">Semua produk bergaransi resmi Apple Indonesia 1 tahun. Tidak ada produk rekondisi atau replika.</p>
+            </div>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-xl p-6 flex items-start space-x-4">
+            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-shipping-fast text-green-600 text-xl"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-gray-900 mb-1">Pengiriman Cepat & Gratis</h4>
+                <p class="text-sm text-gray-500">Pengiriman ke seluruh Indonesia dengan ongkos kirim gratis dan dilengkapi asuransi paket.</p>
+            </div>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-xl p-6 flex items-start space-x-4">
+            <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-lock text-yellow-600 text-xl"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-gray-900 mb-1">Transaksi Aman</h4>
+                <p class="text-sm text-gray-500">Pembayaran diverifikasi manual oleh tim kami. Dana Anda aman hingga barang diterima.</p>
+            </div>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-xl p-6 flex items-start space-x-4">
+            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-headset text-purple-600 text-xl"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-gray-900 mb-1">Dukungan 7 Hari Seminggu</h4>
+                <p class="text-sm text-gray-500">Tim CS kami siap membantu Anda dari Senin–Minggu pukul 08.00–21.00 WIB.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CTA -->
+<div class="bg-slate-900 rounded-2xl p-10 text-center text-white">
+    <h2 class="text-2xl font-bold mb-3">Mulai Belanja atau Bergabung sebagai Reseller</h2>
+    <p class="text-blue-200 text-sm mb-6">Nikmati kemudahan berbelanja atau hasilkan uang dengan menjadi reseller kami.</p>
+    <div class="flex flex-col sm:flex-row justify-center gap-3">
+        <a href="{% url 'store:home' %}" class="bg-white text-slate-900 hover:bg-blue-50 font-bold px-8 py-3 rounded-xl transition">
+            Lihat Produk
+        </a>
+        <a href="{% url 'store:reseller_program' %}" class="bg-blue-900 border border-blue-400 hover:bg-blue-500 text-white font-bold px-8 py-3 rounded-xl transition">
+            Program Reseller
+        </a>
+    </div>
+</div>
+{% endblock %}

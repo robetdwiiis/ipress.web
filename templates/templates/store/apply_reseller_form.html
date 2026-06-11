@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% block title %}Formulir Pengajuan Reseller - iPremium Store{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto py-10 px-4">
+    <!-- Back -->
+    <a href="{% url 'store:reseller_program' %}" class="inline-flex items-center text-sm text-gray-500 hover:text-gray-800 mb-6 transition">
+        <i class="fas fa-arrow-left mr-2"></i> Kembali ke Info Program
+    </a>
+
+    <div class="text-center mb-8">
+        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-handshake text-blue-900 text-2xl"></i>
+        </div>
+        <h1 class="text-2xl font-bold text-gray-900">Formulir Pengajuan Reseller</h1>
+        <p class="text-gray-500 text-sm mt-1">Lengkapi semua data di bawah ini. Admin akan meninjau dalam 1×24 jam.</p>
+    </div>
+
+    <!-- Profil Saat Ini (ringkasan) -->
+    <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-6">
+        <h2 class="text-xs font-bold text-blue-900 uppercase tracking-wider mb-3">Data Akun Anda (dari profil)</h2>
+        <div class="grid grid-cols-2 gap-3 text-sm">
+            <div>
+                <p class="text-gray-400 text-xs">Nama Lengkap</p>
+                <p class="font-semibold text-gray-800">{{ user.get_display_name }}</p>
+            </div>
+            <div>
+                <p class="text-gray-400 text-xs">Username</p>
+                <p class="font-semibold text-gray-800">@{{ user.username }}</p>
+            </div>
+            <div>
+                <p class="text-gray-400 text-xs">Email</p>
+                <p class="font-semibold text-gray-800">{{ user.email|default:"-" }}</p>
+            </div>
+            <div>
+                <p class="text-gray-400 text-xs">Nomor HP</p>
+                <p class="font-semibold text-gray-800">{{ user.phone_number|default:"-" }}</p>
+            </div>
+            {% if not user.phone_number or not user.email %}
+            <div class="col-span-2">
+                <p class="text-xs text-yellow-700 bg-yellow-100 border border-yellow-200 rounded-lg p-2">
+                    <i class="fas fa-exclamation-triangle mr-1"></i>
+                    Data profil Anda belum lengkap.
+                    <a href="{% url 'accounts:profile' %}" class="font-bold underline">Lengkapi profil</a> agar proses persetujuan lebih cepat.
+                </p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Form -->
+    <div class="bg-white border border-gray-200 rounded-xl shadow-sm">
+        <div class="p-6 border-b border-gray-100">
+            <h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider flex items-center">
+                <i class="fas fa-clipboard-list mr-2 text-blue-400"></i> Informasi Tambahan
+            </h2>
+        </div>
+        <form method="post" class="p-6 space-y-6">
+            {% csrf_token %}
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-800 mb-2">
+                    <i class="fab fa-instagram mr-1.5 text-pink-500"></i>
+                    Link Media Sosial / Toko Online
+                </label>
+                {{ form.social_media_link }}
+                <p class="mt-1.5 text-xs text-gray-400">
+                    Contoh: https://instagram.com/tokoanda atau https://tokopedia.com/tokoanda. Kosongkan jika tidak ada.
+                </p>
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-800 mb-2">
+                    <i class="fas fa-bullhorn mr-1.5 text-blue-500"></i>
+                    Rencana Pemasaran <span class="text-red-500">*</span>
+                </label>
+                {{ form.marketing_plan }}
+                <p class="mt-1.5 text-xs text-gray-400">
+                    Ceritakan bagaimana Anda akan memasarkan produk kami. Misalnya: promosi via IG Story, broadcast WA, jualan di marketplace, dll.
+                </p>
+                {% if form.marketing_plan.errors %}
+                <ul class="mt-1 text-red-500 text-xs list-none">
+                    {% for error in form.marketing_plan.errors %}
+                    <li><i class="fas fa-exclamation-circle mr-1"></i>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+
+            <!-- Syarat & Ketentuan -->
+            <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 text-xs text-gray-500 space-y-1">
+                <p class="font-semibold text-gray-700 mb-2">Syarat & Ketentuan:</p>
+                <p>✓ Komisi 5% untuk setiap penjualan langsung via link referral Anda.</p>
+                <p>✓ Komisi 2% jika Anda merekrut reseller lain (upline commission).</p>
+                <p>✓ Saldo dapat ditarik setelah mencapai minimum Rp 100.000.</p>
+                <p>✓ Reseller dilarang menjual di bawah harga yang ditetapkan toko.</p>
+                <p>✓ Status reseller dapat dicabut jika melanggar ketentuan.</p>
+            </div>
+
+            <div class="flex items-start space-x-3">
+                <input type="checkbox" id="agree" required class="mt-1 w-4 h-4 text-blue-900 border-gray-300 rounded">
+                <label for="agree" class="text-sm text-gray-600">
+                    Saya telah membaca dan menyetujui syarat & ketentuan program reseller iPremium Store.
+                </label>
+            </div>
+
+            <button type="submit" class="w-full bg-blue-900 hover:bg-slate-900 text-white font-bold py-3.5 rounded-xl shadow-sm transition">
+                <i class="fas fa-paper-plane mr-2"></i>Kirim Pengajuan Reseller
+            </button>
+        </form>
+    </div>
+</div>
+
+<style>
+    input[type="text"], input[type="url"], textarea, input[type="email"] {
+        width: 100%;
+        padding: 0.7rem 1rem;
+        border-radius: 0.625rem;
+        border: 1px solid #d1d5db;
+        background: #fff;
+        font-size: 0.875rem;
+        transition: all 0.2s;
+        color: #111827;
+    }
+    input[type="text"]:focus, input[type="url"]:focus, textarea:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+    }
+</style>
+{% endblock %}

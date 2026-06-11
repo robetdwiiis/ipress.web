@@ -1,0 +1,106 @@
+{% extends 'base_dashboard.html' %}
+{% load humanize %}
+{% block title %}Tarik Komisi{% endblock %}
+{% block header_title %}Penarikan Komisi{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
+    
+    <!-- Balance Widget -->
+    <div class="lg:col-span-1">
+        <div class="bg-gradient-to-br from-blue-900 to-slate-900 rounded-2xl p-5 md:p-8 text-white shadow-xl relative overflow-hidden mb-4 md:mb-6">
+            <div class="absolute top-0 right-0 p-4 opacity-10">
+                <i class="fas fa-wallet text-8xl"></i>
+            </div>
+            <div class="relative z-10">
+                <p class="text-blue-200 text-sm font-semibold uppercase tracking-wider mb-2">Saldo Komisi Tersedia</p>
+                <h2 class="text-2xl md:text-4xl font-extrabold mb-1">Rp {{ user.wallet_balance|intcomma }}</h2>
+                <p class="text-xs text-blue-300 mb-6">Bisa ditarik kapan saja. Min. tarik Rp 50.000.</p>
+                
+                <div class="bg-white/10 rounded-xl p-4 backdrop-blur-sm border border-white/10">
+                    <div class="flex items-center space-x-3 text-sm">
+                        <i class="fas fa-info-circle text-blue-300"></i>
+                        <p class="text-blue-100 leading-snug">Proses transfer maksimal 1x24 jam di hari kerja. Tidak ada biaya admin (potongan Rp 0).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Request Form -->
+    <div class="lg:col-span-2">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="p-6 border-b border-gray-100 bg-gray-50">
+                <h3 class="text-lg font-bold text-gray-800">Form Pengajuan Penarikan</h3>
+                <p class="text-sm text-gray-500">Pilih rekening bank atau E-Wallet tujuan transfer.</p>
+            </div>
+            
+            <div class="p-6">
+                <form method="POST" class="space-y-5">
+                    {% csrf_token %}
+                    
+                    {% for field in form %}
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1" for="{{ field.id_for_label }}">
+                            {{ field.label }}
+                        </label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <p class="text-red-500 text-xs italic mt-1">{{ field.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                    
+                    <button type="submit" class="w-full bg-blue-900 hover:bg-slate-900 text-white font-bold py-3 px-4 rounded-xl shadow-md transition duration-200 flex justify-center items-center">
+                        <i class="fas fa-paper-plane mr-2"></i> Ajukan Penarikan
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- History -->
+<div class="mt-8 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="p-6 border-b border-gray-100">
+        <h3 class="text-lg font-bold text-gray-800">Riwayat Penarikan</h3>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm text-left text-gray-500">
+            <thead class="text-xs text-gray-400 uppercase bg-gray-50">
+                <tr>
+                    <th class="px-6 py-4">Waktu Pengajuan</th>
+                    <th class="px-6 py-4">Nominal</th>
+                    <th class="px-6 py-4">Tujuan</th>
+                    <th class="px-6 py-4">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for w in withdrawals %}
+                <tr class="bg-white border-b hover:bg-gray-50">
+                    <td class="px-6 py-4">{{ w.created_at|date:"d M Y H:i" }}</td>
+                    <td class="px-6 py-4 font-bold text-gray-900">Rp {{ w.amount|intcomma }}</td>
+                    <td class="px-6 py-4">
+                        <span class="block text-gray-800 font-semibold">{{ w.get_bank_name_display|default:w.bank_name }}</span>
+                        <span class="text-xs text-gray-500">{{ w.account_number }} a/n {{ w.account_name }}</span>
+                    </td>
+                    <td class="px-6 py-4">
+                        {% if w.status == 'PENDING' %}
+                            <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded-full"><i class="fas fa-clock mr-1"></i> Diproses</span>
+                        {% elif w.status == 'APPROVED' %}
+                            <span class="bg-green-100 text-green-800 text-xs font-semibold px-3 py-1 rounded-full"><i class="fas fa-check mr-1"></i> Selesai</span>
+                        {% else %}
+                            <span class="bg-red-100 text-red-800 text-xs font-semibold px-3 py-1 rounded-full"><i class="fas fa-times mr-1"></i> Ditolak</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="px-6 py-8 text-center text-gray-500">Belum ada riwayat penarikan dana.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

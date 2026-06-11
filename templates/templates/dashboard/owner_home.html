@@ -1,0 +1,99 @@
+{% extends 'base_dashboard.html' %}
+{% load humanize %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block header_title %}Overview{% endblock %}
+
+{% block content %}
+<!-- Pending Applications Alert -->
+{% if pending_applications_count > 0 %}
+<div class="mb-6 bg-yellow-50 border border-yellow-200 rounded-xl p-4 flex items-center justify-between">
+    <div class="flex items-center space-x-3">
+        <div class="w-9 h-9 bg-yellow-100 rounded-full flex items-center justify-center">
+            <i class="fas fa-bell text-yellow-600"></i>
+        </div>
+        <div>
+            <p class="font-bold text-yellow-800 text-sm">Ada {{ pending_applications_count }} pengajuan reseller menunggu persetujuan</p>
+            <p class="text-xs text-yellow-600">Tinjau dan setujui/tolak pengajuan sebelum 1×24 jam.</p>
+        </div>
+    </div>
+    <a href="{% url 'dashboard:reseller_applications' %}" class="flex-shrink-0 bg-yellow-400 hover:bg-yellow-500 text-white font-bold px-4 py-2 rounded-lg text-sm transition">
+        Tinjau Sekarang
+    </a>
+</div>
+{% endif %}
+
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 relative overflow-hidden group">
+        <div class="absolute top-0 right-0 p-4 opacity-10 transform group-hover:scale-110 transition duration-500">
+            <i class="fas fa-wallet text-6xl text-blue-900"></i>
+        </div>
+        <h3 class="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-1">Total Pendapatan</h3>
+        <p class="text-2xl font-extrabold text-blue-900">Rp {{ total_revenue|intcomma }}</p>
+    </div>
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 relative overflow-hidden group">
+        <div class="absolute top-0 right-0 p-4 opacity-10 transform group-hover:scale-110 transition duration-500">
+            <i class="fas fa-shopping-cart text-6xl text-gray-900"></i>
+        </div>
+        <h3 class="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-1">Total Pesanan</h3>
+        <p class="text-2xl font-extrabold text-gray-900">{{ total_orders }}</p>
+    </div>
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 relative overflow-hidden group">
+        <div class="absolute top-0 right-0 p-4 opacity-10 transform group-hover:scale-110 transition duration-500">
+            <i class="fas fa-users text-6xl text-emerald-600"></i>
+        </div>
+        <h3 class="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-1">Jumlah Reseller</h3>
+        <p class="text-2xl font-extrabold text-emerald-600">{{ resellers_count }}</p>
+    </div>
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 relative overflow-hidden group">
+        <div class="absolute top-0 right-0 p-4 opacity-10 transform group-hover:scale-110 transition duration-500">
+            <i class="fas fa-clock text-6xl text-yellow-500"></i>
+        </div>
+        <h3 class="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-1">Pengajuan Pending</h3>
+        <p class="text-2xl font-extrabold text-yellow-500">{{ pending_applications_count }}</p>
+    </div>
+</div>
+
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+        <h2 class="text-xl font-bold text-gray-800">Pesanan Terbaru</h2>
+        <a href="{% url 'dashboard:orders' %}" class="text-sm font-medium text-blue-900 hover:text-slate-800">Lihat Semua <i class="fas fa-arrow-right ml-1"></i></a>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm text-left text-gray-500">
+            <thead class="text-xs text-gray-400 uppercase bg-gray-50">
+                <tr>
+                    <th class="px-6 py-4">ID Pesanan</th>
+                    <th class="px-6 py-4">Produk</th>
+                    <th class="px-6 py-4">Pembeli</th>
+                    <th class="px-6 py-4">Status</th>
+                    <th class="px-6 py-4">Tanggal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in recent_orders %}
+                <tr class="bg-white border-b hover:bg-gray-50 transition">
+                    <td class="px-6 py-4 font-bold text-gray-900">#{{ order.id }}</td>
+                    <td class="px-6 py-4">{{ order.product.name }}</td>
+                    <td class="px-6 py-4">{{ order.buyer.username }}</td>
+                    <td class="px-6 py-4">
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold
+                            {% if order.status == 'PENDING' %}bg-yellow-100 text-yellow-800
+                            {% elif order.status == 'PAID' %}bg-blue-100 text-slate-800
+                            {% elif order.status == 'SHIPPED' %}bg-purple-100 text-purple-800
+                            {% elif order.status == 'COMPLETED' %}bg-green-100 text-green-800
+                            {% else %}bg-gray-100 text-gray-800{% endif %}">
+                            {{ order.get_status_display }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4">{{ order.created_at|date:"d M Y H:i" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="px-6 py-8 text-center text-gray-500">Belum ada pesanan masuk.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
